@@ -10,6 +10,7 @@ using namespace std;
 void main()
 {
 
+
 	// ---------------------- MUTEX -----------------------------
 	HANDLE hMutex = CreateMutex(NULL, TRUE, "process1_mutex");
 
@@ -73,6 +74,36 @@ void main()
 	
 	ReleaseMutex(hMutex);
 	ReleaseSemaphore(hSemaphore, MAX_SEM_COUNT, NULL);
+
+	cout << "Press any key to create new process" << endl;
+	system("pause");
+
+
+	STARTUPINFO si = { sizeof(si) };
+	PROCESS_INFORMATION pi;
+	char cmdLn[] = "process4";
+
+	if (CreateProcess(NULL, cmdLn, NULL, NULL, TRUE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi))
+	{
+		CloseHandle(pi.hThread);
+		CloseHandle(pi.hProcess);
+	}
+	else
+	{
+		cout << "Error: " << GetLastError();
+	}
+
+	/*STARTUPINFO si = { sizeof(si) };
+	PROCESS_INFORMATION pi;
+	char cmdLn[] = "process3\0";
+
+	if (CreateProcess("childProcess", cmdLn, NULL, NULL, TRUE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi)) {
+		cout << "Proccess create success\n";
+	}
+	else {
+		cout << "Fail to create new procces\n";
+		cout << "Error: " << GetLastError() << endl;
+	}*/
 
 	cout << "Press any key to close handles mutex,semaphore,timer..." << endl;
 	system("pause");
