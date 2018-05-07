@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 
-#include <Windows.h>
+#include <windows.h>
 #include <stdio.h>
 #include <conio.h>
 
@@ -8,11 +8,10 @@
 
 HANDLE hEvent;
 
-DWORD WINAPI threadExecut1(LPVOID);
-DWORD WINAPI threadExecut2(LPVOID);
+DWORD WINAPI thread1Func(LPVOID);
+DWORD WINAPI thread2Func(LPVOID);
 
 void main() {
-
 
 	char choose;
 
@@ -38,8 +37,8 @@ void main() {
 	}
 
 
-	HANDLE hThread1 = CreateThread(NULL, 0, threadExecut1, NULL, NULL, NULL);
-	HANDLE hThread2 = CreateThread(NULL, 0, threadExecut2, NULL, NULL, NULL);
+	HANDLE hThread1 = CreateThread(NULL, 0, thread1Func, NULL, NULL, NULL);
+	HANDLE hThread2 = CreateThread(NULL, 0, thread2Func, NULL, NULL, NULL);
 
 	WaitForSingleObject(hThread1, INFINITE);
 	printf("Thread 1 finished.\n");
@@ -57,12 +56,16 @@ void main() {
 
 }
 
-DWORD WINAPI threadExecut1(LPVOID) {
+DWORD WINAPI thread1Func(LPVOID) {
 	printf("Thread id:%d started\n", GetCurrentThreadId());
+
 	printf("Thread id:%d wait for event object\n", GetCurrentThreadId());
+
 	WaitForSingleObject(hEvent, INFINITE);
+
 	printf("Thread id:%d got event object\n", GetCurrentThreadId());
-	for (int i = 0; i <= N; ++i) {
+
+	for (int i = 1; i <= N; ++i) {
 		printf("%d ", i);
 		Sleep(3);
 	}
@@ -70,12 +73,16 @@ DWORD WINAPI threadExecut1(LPVOID) {
 	return 0;
 }
 
-DWORD WINAPI threadExecut2(LPVOID) {
+DWORD WINAPI thread2Func(LPVOID) {
 	printf("Thread id:%d started\n", GetCurrentThreadId());
+
 	printf("Thread id:%d wait for event object\n", GetCurrentThreadId());
+
 	WaitForSingleObject(hEvent, INFINITE);
+
 	printf("Thread id:%d got event object\n", GetCurrentThreadId());
-	for (int i = 0; i <= N; ++i) {
+
+	for (int i = -1; i >= -N; --i) {
 		printf("%d ", i);
 		Sleep(3);
 	}

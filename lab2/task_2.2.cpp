@@ -2,22 +2,17 @@
 #include <iostream>
 #include <conio.h>
 
-#define N 50
+#define N 500
 
 HANDLE ghWriteEvent;
 
-DWORD WINAPI threadExecut1(LPVOID);
-DWORD WINAPI threadExecut2(LPVOID);
+DWORD WINAPI thread1Func(LPVOID);
+DWORD WINAPI thread2Func(LPVOID);
 
 
 void main() {
 
-	ghWriteEvent = CreateEvent(
-		NULL,               // default security attributes
-		TRUE,               // manual-reset event
-		FALSE,              // initial state is nonsignaled
-		TEXT("WriteEvent")  // object name
-	);
+	ghWriteEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
 	if (ghWriteEvent == NULL)
 	{
@@ -25,20 +20,13 @@ void main() {
 		return;
 	}
 
-	HANDLE thread2 = CreateThread(NULL, 0, threadExecut2, NULL, NULL, NULL);
-	HANDLE thread1 = CreateThread(NULL, 0, threadExecut1, NULL, NULL, NULL);
+	HANDLE thread2 = CreateThread(NULL, 0, thread2Func, NULL, NULL, NULL);
+	HANDLE thread1 = CreateThread(NULL, 0, thread1Func, NULL, NULL, NULL);
 
-	/*ResumeThread(thread1);
-	ResumeThread(thread2);*/
-
-	printf("Main thread has finished\n");
 	_getch();
 }
 
-DWORD WINAPI threadExecut1(LPVOID) {
-
-	/*printf("First procces wait for event object\n");*/
-
+DWORD WINAPI thread1Func(LPVOID) {
 	printf("---------------------------------------------------------------------------------\n");
 	printf("First thread is started\n");
 	for (int i = 1; i <= N; ++i) {
@@ -51,19 +39,17 @@ DWORD WINAPI threadExecut1(LPVOID) {
 	if (!SetEvent(ghWriteEvent))
 	{
 		printf("SetEvent failed (%d)\n", GetLastError());
-		return 0;
+		return GetLastError();
 	}
 
 	return 0;
 }
 
-DWORD WINAPI threadExecut2(LPVOID) {
+DWORD WINAPI thread2Func(LPVOID) {
 
 	printf("Second procces wait for event object\n");
 
-	WaitForSingleObject(
-		ghWriteEvent, // event handle
-		INFINITE);    // indefinite wait
+	WaitForSingleObject(ghWriteEvent, INFINITE);
 
 	printf("---------------------------------------------------------------------------------\n");
 	printf("Second thread is started\n");
