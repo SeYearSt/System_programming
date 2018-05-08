@@ -1,17 +1,17 @@
 #include <windows.h>
 #include <stdio.h>
 #include <conio.h>
+
 #define MAX_COUNT 2 
 #define szBuf 512
+#define szMessage 255
 #define sName "procces3Semaphore"
 #define mpName "MapFileObject.txt"
-//#define message "Hello"
+
 
 HANDLE hSemaphore = CreateSemaphore(NULL,MAX_COUNT,MAX_COUNT,sName);
 
 void main() {
-
-	
 
 	if (GetLastError() == ERROR_ALREADY_EXISTS) {
 		printf("Semaphore already exist!\n");
@@ -49,10 +49,10 @@ void main() {
 	}
 	else {
 
-		char message[255];
+		char message[szMessage];
 
 		printf("Enter message: ");
-		fgets(message, 255, stdin);
+		fgets(message, szMessage, stdin);
 
 
 		HANDLE hMap = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, NULL, szBuf, mpName);

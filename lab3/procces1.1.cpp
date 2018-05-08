@@ -1,4 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
+
 #include <windows.h>
 #include <stdio.h>
 #include <conio.h>
@@ -12,7 +13,6 @@ using namespace std;
 
 void main(int argc, char *argv[]) {
 
-	//LPCTSTR fname = TEXT("myFile.txt");
 	if (argc < 3) {
 		cout << "Incorrect count of argumens!";
 		_getch();
@@ -26,8 +26,6 @@ void main(int argc, char *argv[]) {
 	LPCTSTR mapName = TEXT(argv[1]);
 	LPCTSTR pBuf;
 	HANDLE hMap;
-	//HANDLE hFile;
-	//TCHAR szMsg[] = message;
 
 	hMap = CreateFileMapping(/*hFile*/INVALID_HANDLE_VALUE, NULL,/* PAGE_READONLY */PAGE_READWRITE, NULL, bufSize/*NULL*/, mapName);
 
@@ -66,17 +64,6 @@ void main(int argc, char *argv[]) {
 		_getch();
 		return;
 	}
-
-
-//	cout << GetFileSize(hMap, NULL);
-
-	//FlushViewOfFile(hMap, GetFileSize(hMap, NULL));
-
-	//CopyMemory((PVOID)buf, pBuf, (_tcslen(pBuf) * sizeof(TCHAR)));
-
-	// output text in mapping file
-	//cout << pBuf;
-
 	cout << "Press any key to close map file\n";
 
 	_getch();
@@ -85,7 +72,7 @@ void main(int argc, char *argv[]) {
 
 	CloseHandle(hMap);
 
-	cout << "End...";
+	cout << "Press any key to close aplication\n";
 	_getch();
 
 

@@ -15,7 +15,6 @@ void main(int argc, char *argv[]) {
 		return;
 	}
 
-
 	LPCTSTR mapName = TEXT(argv[1]);
 	LPCTSTR pBuf;
 	HANDLE hMap = OpenFileMapping(FILE_MAP_ALL_ACCESS, FALSE, mapName);
@@ -54,8 +53,7 @@ void main(int argc, char *argv[]) {
 
 	CloseHandle(hMap);
 
-	cout << "End...";
+	cout << "Press any key to close aplication\n";
 	_getch();
-
 
 }
