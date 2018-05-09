@@ -1,15 +1,29 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <windows.h> 
 #include <iostream>
 #include <string>
 #include <conio.h>
 #include <tchar.h>
 
-#define szBuffer 255
+#define szBuffer 512
 
-int main() {
+int main(int argc, char * argv[]) {
 
 	char ReadBuffer[szBuffer] = { 0 };
 	char WriteBuffer[szBuffer] = "Default message";
+	char pipName[] = "";
+
+
+	char pipeName[szBuffer] = "\\\\.\\pipe\\";
+
+	if (argc >= 2) {
+		strcat(pipeName, argv[1]);
+	}
+	else {
+		strcat(pipeName, "my_pipe");
+	}
+
 
 	DWORD dwBytesToWrite;
 	DWORD dwBytesWritten = 0;
@@ -18,16 +32,16 @@ int main() {
 
 	HANDLE hNamedPipe;
 
-	if (!WaitNamedPipe("\\\\.\\pipe\\my_pipe", NMPWAIT_USE_DEFAULT_WAIT)) {
+	if (!WaitNamedPipe(pipeName, NMPWAIT_USE_DEFAULT_WAIT)) {
 		std::cout << "Server is unaccessible.\n";
 		_getch();
 		return -1;
 	}
 
-	hNamedPipe = CreateFile("\\\\.\\pipe\\my_pipe", GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
+	hNamedPipe = CreateFile(pipeName, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
 
 	if (hNamedPipe == INVALID_HANDLE_VALUE) {
-		std::cout << "Problem with create pipe\n";
+		std::cout << "Problem with creating pipe\n";
 		std::cout << "Error: " << GetLastError();
 		_getch();
 		return -1;
